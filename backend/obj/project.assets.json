@@ -8174,11 +8174,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\web\\API\\HospitalSystemAPI\\HospitalSystemAPI.csproj",
+      "projectUniqueName": "D:\\web\\API\\HospitalSystemAPI\\backend\\HospitalSystemAPI.csproj",
       "projectName": "HospitalSystemAPI",
-      "projectPath": "D:\\web\\API\\HospitalSystemAPI\\HospitalSystemAPI.csproj",
+      "projectPath": "D:\\web\\API\\HospitalSystemAPI\\backend\\HospitalSystemAPI.csproj",
       "packagesPath": "C:\\Users\\Royal\\.nuget\\packages\\",
-      "outputPath": "D:\\web\\API\\HospitalSystemAPI\\obj\\",
+      "outputPath": "D:\\web\\API\\HospitalSystemAPI\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Royal\\AppData\\Roaming\\NuGet\\NuGet.Config",

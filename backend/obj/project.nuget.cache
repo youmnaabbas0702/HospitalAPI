@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "F0B/FH+GotE=",
+  "dgSpecHash": "3ys1jdrPK88=",
   "success": true,
-  "projectFilePath": "D:\\web\\API\\HospitalSystemAPI\\HospitalSystemAPI.csproj",
+  "projectFilePath": "D:\\web\\API\\HospitalSystemAPI\\backend\\HospitalSystemAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Royal\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

@@ -7,7 +7,5 @@
         public string Condition { get; set; } = string.Empty;
         public DateTime RecordDate { get; set; }
         public string Treatment { get; set; } = string.Empty;
-
-        public Patient Patient { get; set; } = default!;
     }
 }

@@ -27,7 +27,7 @@ namespace HospitalSystemAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPatientDTO>>> GetPatients()
         {
-            var patients = await _context.Patients.ToListAsync();
+            var patients = await _context.Patients.Include(p => p.MedicalHistory).ToListAsync();
 
             List<GetPatientDTO> PatientsObject = getPatientsDTOobject(patients);
 
@@ -38,7 +38,7 @@ namespace HospitalSystemAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPatientDTO>> GetPatient(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
+            var patient = await _context.Patients.Include(p=>p.MedicalHistory).FirstOrDefaultAsync(p=>p.Id==id);
 
             if (patient == null)
             {
@@ -51,7 +51,7 @@ namespace HospitalSystemAPI.Controllers
                 Name = patient.Name,
                 PhoneNumber = patient.PhoneNumber,
                 BirthDate = patient.BirthDate,
-                MedicalHistory = patient.MedicalHistory,
+                MedicalHistories = patient.MedicalHistory.ToArray(),
             };
             return PatientObject;
         }
@@ -166,7 +166,7 @@ namespace HospitalSystemAPI.Controllers
                     Name = patient.Name,
                     PhoneNumber = patient.PhoneNumber,
                     BirthDate = patient.BirthDate,
-                    MedicalHistory = patient.MedicalHistory,
+                    MedicalHistories = patient.MedicalHistory.ToArray(),
                 });
             }
             return PatientsObject;
