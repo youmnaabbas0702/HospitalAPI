@@ -36,10 +36,7 @@ namespace HospitalSystemAPI.Data
             // Seed Admins
             modelBuilder.Entity<Admin>().HasData(
                 new Admin { Id = 1, UserName = "admin_general", Email = "admin_general@gmail.com", Password = "password123", SpecialityId = 1 },
-                new Admin { Id = 2, UserName = "admin_emergency", Email = "admin_emergency@gmail.com", Password = "password123", SpecialityId = 2 },
-                new Admin { Id = 3, UserName = "admin_pediatrics", Email = "admin_pediatrics@gmail.com", Password = "password123", SpecialityId = 3 },
-                new Admin { Id = 4, UserName = "admin_cardiology", Email = "admin_cardiology@gmail.com", Password = "password123", SpecialityId = 4 },
-                new Admin { Id = 5, UserName = "admin_orthopedics", Email = "admin_orthopedics@gmail.com", Password = "password123",SpecialityId=5 }
+                new Admin { Id = 2, UserName = "admin_emergency", Email = "admin_emergency@gmail.com", Password = "password123", SpecialityId = 2 }
             );
 
             modelBuilder.Entity<Patient>()

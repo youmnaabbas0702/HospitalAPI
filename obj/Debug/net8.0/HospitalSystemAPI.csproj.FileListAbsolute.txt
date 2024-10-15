@@ -256,3 +256,4 @@ D:\web\API\HospitalSystemAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.
 D:\web\API\HospitalSystemAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 D:\web\API\HospitalSystemAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\web\API\HospitalSystemAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+D:\web\API\HospitalSystemAPI\obj\Debug\net8.0\HospitalSystemAPI.sourcelink.json

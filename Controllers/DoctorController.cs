@@ -11,7 +11,9 @@ using HospitalSystemAPI.DTOs;
 
 namespace HospitalSystemAPI.Controllers
 {
-    public class DoctorController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DoctorController : ControllerBase
     {
         private readonly HospitalDbContext _context;
 
@@ -20,22 +22,32 @@ namespace HospitalSystemAPI.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        //used with general admin authorization
+        // GET: api/Doctor
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GetDoctorDTO>>> GetDoctors()
         {
             var doctors = await _context.Doctors.Include(d => d.Speciality).ToListAsync();
-            List<GetDoctorVM> DoctorsObject = getDoctorsVMobject(doctors);
-            return View(DoctorsObject);  // Return the view that displays the list of doctors
+
+            List<GetDoctorDTO> DoctorsObject = getDoctorsDTOobject(doctors);
+            return DoctorsObject;
         }
 
-        
-        public async Task<IActionResult> DoctorsBySpeciality(int id)
+        //used with speciality and general admin authorization
+        // GET: api/Doctor/Speciality/5
+        [HttpGet("Speciality/{id}")]
+        public async Task<ActionResult<IEnumerable<GetDoctorDTO>>> GetSpecialityDoctors(int id)
         {
             var doctors = await _context.Doctors.Include(d => d.Speciality).Where(d => d.SpecialityId == id).ToListAsync();
-            List<GetDoctorVM> DoctorsObject = getDoctorsVMobject(doctors);
-            return View("Index", DoctorsObject);  
+
+            List<GetDoctorDTO> DoctorsObject = getDoctorsDTOobject(doctors);
+            return DoctorsObject;
         }
 
-        public async Task<IActionResult> Details(int id)
+        //used with admin or doctor authorization
+        // GET: api/Doctor/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetDoctorDTO>> GetDoctor(int id)
         {
             var doctor = await _context.Doctors.Include(d => d.Speciality).SingleOrDefaultAsync(d => d.Id == id);
             if (doctor == null)
@@ -43,67 +55,23 @@ namespace HospitalSystemAPI.Controllers
                 return NotFound();
             }
 
-            GetDoctorVM DoctorObject = new GetDoctorVM()
+            GetDoctorDTO DoctorObject = new GetDoctorDTO()
             {
                 Id = doctor.Id,
                 Name = doctor.Name,
                 PhoneNumber = doctor.PhoneNumber,
                 speciality = doctor.Speciality.Name
             };
-            return View(DoctorObject);  // Return the view for doctor details
+            return DoctorObject;
         }
 
-        // GET: Doctor/Create
-        // Displays a form for creating a new doctor
-        public IActionResult Create()
+        //with general and specialization admin authorization
+        // PUT: api/Doctor/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutDoctor(int id, DoctorInsertionDTO doctorDto)
         {
-            return View();  // Return a view containing a form to add a doctor
-        }
-
-        // POST: Doctor/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]  // Prevents CSRF attacks
-        public async Task<IActionResult> Create(DoctorInsertionVM doctorVM)
-        {
-            if (ModelState.IsValid)
-            {
-                var newDoctor = new Doctor();
-                MapVmToDoctor(doctorVM, newDoctor);
-                _context.Doctors.Add(newDoctor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));  // Redirect to list after successful creation
-            }
-            return View(doctorVM);  // If invalid, return the form with validation messages
-        }
-
-        // GET: Doctor/Edit/5
-        // Shows the form to edit an existing doctor
-        public async Task<IActionResult> Edit(int id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-
-            var doctorVM = new DoctorInsertionVM()
-            {
-                Id = doctor.Id,
-                Name = doctor.Name,
-                PhoneNumber = doctor.PhoneNumber,
-                SpecialityId = doctor.SpecialityId,
-                Email = doctor.Email,
-                Password = doctor.password
-            };
-            return View(doctorVM);  // Return the view containing the edit form
-        }
-
-        // POST: Doctor/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DoctorInsertionVM doctorVM)
-        {
-            if (id != doctorVM.Id || !ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -114,36 +82,72 @@ namespace HospitalSystemAPI.Controllers
                 return NotFound();
             }
 
-            MapVmToDoctor(doctorVM, existingDoctor);
-            _context.Entry(existingDoctor).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));  // Redirect after editing
-        }
+            // Call the private method to map DTO to the entity
+            MapDtoToDoctor(doctorDto, existingDoctor);
 
-        // GET: Doctor/Delete/5
-        // Shows confirmation for deleting a doctor
-        public async Task<IActionResult> Delete(int id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
+            _context.Entry(existingDoctor).State = EntityState.Modified;
+
+            try
             {
-                return NotFound();
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DoctorExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            GetDoctorVM DoctorObject = new GetDoctorVM()
-            {
-                Id = doctor.Id,
-                Name = doctor.Name,
-                PhoneNumber = doctor.PhoneNumber,
-                speciality = doctor.Speciality.Name
-            };
-            return View(DoctorObject);  // Return a confirmation view for deletion
+            return NoContent();
         }
 
-        // POST: Doctor/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        //with general and specialization admin authorization
+        // POST: api/Doctor
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<IActionResult> PostDoctor(DoctorInsertionDTO doctorDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Create a new Doctor entity
+            var newDoctor = new Doctor();
+
+            // Call the private method to map DTO to the entity
+            MapDtoToDoctor(doctorDto, newDoctor);
+
+            _context.Doctors.Add(newDoctor);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (DoctorExists(newDoctor.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetDoctor", new { id = newDoctor.Id }, newDoctor);
+        }
+
+        //with general and specialization admin authorization
+        // DELETE: api/Doctor/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDoctor(int id)
         {
             var doctor = await _context.Doctors.FindAsync(id);
             if (doctor == null)
@@ -153,21 +157,21 @@ namespace HospitalSystemAPI.Controllers
 
             _context.Doctors.Remove(doctor);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));  // Redirect to list after deletion
+
+            return NoContent();
         }
 
-        // Private methods remain the same
         private bool DoctorExists(int id)
         {
             return _context.Doctors.Any(e => e.Id == id);
         }
 
-        private List<GetDoctorVM> getDoctorsVMobject(List<Doctor> doctors)
+        private List<GetDoctorDTO> getDoctorsDTOobject(List<Doctor> doctors)
         {
-            List<GetDoctorVM> DoctorsObject = new List<GetDoctorVM>();
+            List<GetDoctorDTO> DoctorsObject = new List<GetDoctorDTO>();
             foreach (var doctor in doctors)
             {
-                DoctorsObject.Add(new GetDoctorVM()
+                DoctorsObject.Add(new GetDoctorDTO()
                 {
                     Id = doctor.Id,
                     Name = doctor.Name,
@@ -178,14 +182,14 @@ namespace HospitalSystemAPI.Controllers
             return DoctorsObject;
         }
 
-        private void MapVmToDoctor(DoctorInsertionVM doctorVM, Doctor doctor)
+        private void MapDtoToDoctor(DoctorInsertionDTO doctorDto, Doctor doctor)
         {
-            doctor.Id = doctorVM.Id;
-            doctor.Name = doctorVM.Name;
-            doctor.PhoneNumber = doctorVM.PhoneNumber;
-            doctor.SpecialityId = doctorVM.SpecialityId;
-            doctor.Email = doctorVM.Email;
-            doctor.password = doctorVM.Password;
+            doctor.Id = doctorDto.Id;
+            doctor.Name = doctorDto.Name;
+            doctor.PhoneNumber = doctorDto.PhoneNumber;
+            doctor.SpecialityId = doctorDto.SpecialityId;
+            doctor.Email = doctorDto.Email;
+            doctor.password = doctorDto.Password;
         }
     }
 

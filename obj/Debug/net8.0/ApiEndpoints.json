@@ -126,26 +126,6 @@
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
-    "Method": "GetDoctorsSchedules",
-    "RelativePath": "api/DoctorSchedule",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.Models.DoctorSchedule, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
     "Method": "PostDoctorSchedule",
     "RelativePath": "api/DoctorSchedule",
     "HttpMethod": "POST",
@@ -186,7 +166,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[HospitalSystemAPI.Models.DoctorSchedule, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[HospitalSystemAPI.DTOs.DoctorDTOs.DoctorScheduleDTO, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

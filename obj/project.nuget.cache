@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uQuzG/1FPR0=",
+  "dgSpecHash": "F0B/FH+GotE=",
   "success": true,
   "projectFilePath": "D:\\web\\API\\HospitalSystemAPI\\HospitalSystemAPI.csproj",
   "expectedPackageFiles": [
@@ -56,6 +56,7 @@
     "C:\\Users\\Royal\\.nuget\\packages\\humanizer.core.zh-cn\\2.14.1\\humanizer.core.zh-cn.2.14.1.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\humanizer.core.zh-hans\\2.14.1\\humanizer.core.zh-hans.2.14.1.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\humanizer.core.zh-hant\\2.14.1\\humanizer.core.zh-hant.2.14.1.nupkg.sha512",
+    "C:\\Users\\Royal\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\8.0.10\\microsoft.aspnetcore.jsonpatch.8.0.10.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\6.0.24\\microsoft.aspnetcore.razor.language.6.0.24.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.build\\17.8.3\\microsoft.build.17.8.3.nupkg.sha512",
@@ -71,7 +72,7 @@
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.codeanalysis.razor\\6.0.24\\microsoft.codeanalysis.razor.6.0.24.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.codeanalysis.scripting.common\\4.8.0\\microsoft.codeanalysis.scripting.common.4.8.0.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.codeanalysis.workspaces.common\\4.8.0\\microsoft.codeanalysis.workspaces.common.4.8.0.nupkg.sha512",
-    "C:\\Users\\Royal\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\Royal\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.data.sqlclient\\5.1.5\\microsoft.data.sqlclient.5.1.5.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.1.1\\microsoft.data.sqlclient.sni.runtime.5.1.1.nupkg.sha512",
     "C:\\Users\\Royal\\.nuget\\packages\\microsoft.diasymreader\\2.0.0\\microsoft.diasymreader.2.0.0.nupkg.sha512",

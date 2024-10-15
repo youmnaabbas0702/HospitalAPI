@@ -107,7 +107,7 @@ namespace HospitalSystemAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Create a new Doctor entity
+            // Create a new patient entity
             var newPatient = new Patient();
 
             // Call the private method to map DTO to the entity

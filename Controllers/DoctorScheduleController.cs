@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
+using HospitalSystemAPI.DTOs.DoctorDTOs;
 
 namespace HospitalSystemAPI.Controllers
 {
@@ -23,16 +24,22 @@ namespace HospitalSystemAPI.Controllers
 
         // GET: api/DoctorSchedule/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<DoctorSchedule>>> GetDoctorSchedules(int id)
+        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(int id)
         {
-            var doctorSchedule = await _context.DoctorsSchedules.Where(s => s.DoctorId==id).ToListAsync();
+            var doctorSchedule = await _context.DoctorsSchedules.Include(s => s.Doctor).Where(s => s.DoctorId==id).ToListAsync();
 
             if (doctorSchedule == null)
             {
                 return NotFound();
             }
 
-            return doctorSchedule;
+            var ScheduleObject = new List<DoctorScheduleDTO>();
+
+            foreach(var schedule in doctorSchedule)
+            {
+                ScheduleObject.Add(new DoctorScheduleDTO() { DoctorName = schedule.Doctor.Name, Day = schedule.Day, StartTime = schedule.StartTime, EndTime = schedule.EndTime });
+            }
+            return ScheduleObject;
         }
 
         // PUT: api/DoctorSchedule/5
