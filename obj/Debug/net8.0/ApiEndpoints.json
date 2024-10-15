@@ -1,15 +1,15 @@
 [
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "GetDoctors",
-    "RelativePath": "api/Doctor",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "GetAppointments",
+    "RelativePath": "api/Appointment",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.DTOs.GetDoctorDTO, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.DTOs.AppointmentDTOs.ViewAppointments, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -20,25 +20,35 @@
     ]
   },
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "PostDoctor",
-    "RelativePath": "api/Doctor",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "PostAppointment",
+    "RelativePath": "api/Appointment",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "doctorDto",
-        "Type": "HospitalSystemAPI.DTOs.DoctorInsertionDTO",
+        "Name": "appointment",
+        "Type": "HospitalSystemAPI.DTOs.AppointmentDTOs.NewAppointment",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "HospitalSystemAPI.Models.Appointment",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "GetDoctor",
-    "RelativePath": "api/Doctor/{id}",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "GetAppointment",
+    "RelativePath": "api/Appointment/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -51,7 +61,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "HospitalSystemAPI.DTOs.GetDoctorDTO",
+        "Type": "HospitalSystemAPI.Models.Appointment",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -62,10 +72,10 @@
     ]
   },
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "PutDoctor",
-    "RelativePath": "api/Doctor/{id}",
-    "HttpMethod": "PUT",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "PatchAppointment",
+    "RelativePath": "api/Appointment/{id}",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -75,17 +85,17 @@
         "IsRequired": true
       },
       {
-        "Name": "doctorDto",
-        "Type": "HospitalSystemAPI.DTOs.DoctorInsertionDTO",
+        "Name": "patchDoc",
+        "Type": "Microsoft.AspNetCore.JsonPatch.JsonPatchDocument\u00601[[HospitalSystemAPI.Models.Appointment, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "DeleteDoctor",
-    "RelativePath": "api/Doctor/{id}",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "DeleteAppointment",
+    "RelativePath": "api/Appointment/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -99,22 +109,22 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "GetSpecialityDoctors",
-    "RelativePath": "api/Doctor/Speciality/{id}",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "GetAppointmentsByDoctor",
+    "RelativePath": "api/Appointment/byDoctor/{doctorId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "doctorId",
         "Type": "System.Int32",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.DTOs.GetDoctorDTO, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.Models.Appointment, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -125,16 +135,22 @@
     ]
   },
   {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
-    "Method": "GetDoctorsSchedules",
-    "RelativePath": "api/DoctorSchedule",
+    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
+    "Method": "GetAppointmentsByPatient",
+    "RelativePath": "api/Appointment/byPatient/{patientId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.Models.DoctorSchedule, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.Models.Appointment, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -450,26 +466,5 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.WeatherForecast, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetWeatherForecast"
   }
 ]

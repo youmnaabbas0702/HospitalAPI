@@ -23,7 +23,7 @@ namespace HospitalSystemAPI.Controllers
         public async Task<IActionResult> Index()
         {
             var doctors = await _context.Doctors.Include(d => d.Speciality).ToListAsync();
-            List<GetDoctorVM> DoctorsObject = getDoctorsVMobject(doctors);
+            List<GetDoctorDTO> DoctorsObject = getDoctorsVMobject(doctors);
             return View(DoctorsObject);  // Return the view that displays the list of doctors
         }
 
@@ -31,7 +31,7 @@ namespace HospitalSystemAPI.Controllers
         public async Task<IActionResult> DoctorsBySpeciality(int id)
         {
             var doctors = await _context.Doctors.Include(d => d.Speciality).Where(d => d.SpecialityId == id).ToListAsync();
-            List<GetDoctorVM> DoctorsObject = getDoctorsVMobject(doctors);
+            List<GetDoctorDTO> DoctorsObject = getDoctorsVMobject(doctors);
             return View("Index", DoctorsObject);  
         }
 
@@ -43,12 +43,12 @@ namespace HospitalSystemAPI.Controllers
                 return NotFound();
             }
 
-            GetDoctorVM DoctorObject = new GetDoctorVM()
+            GetDoctorDTO DoctorObject = new GetDoctorDTO()
             {
                 Id = doctor.Id,
                 Name = doctor.Name,
                 PhoneNumber = doctor.PhoneNumber,
-                speciality = doctor.Speciality.Name
+                Speciality = doctor.Speciality.Name
             };
             return View(DoctorObject);  // Return the view for doctor details
         }
@@ -63,7 +63,7 @@ namespace HospitalSystemAPI.Controllers
         // POST: Doctor/Create
         [HttpPost]
         [ValidateAntiForgeryToken]  // Prevents CSRF attacks
-        public async Task<IActionResult> Create(DoctorInsertionVM doctorVM)
+        public async Task<IActionResult> Create(DoctorInsertionDTO doctorVM)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace HospitalSystemAPI.Controllers
                 return NotFound();
             }
 
-            var doctorVM = new DoctorInsertionVM()
+            var doctorVM = new DoctorInsertionDTO()
             {
                 Id = doctor.Id,
                 Name = doctor.Name,
@@ -101,7 +101,7 @@ namespace HospitalSystemAPI.Controllers
         // POST: Doctor/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DoctorInsertionVM doctorVM)
+        public async Task<IActionResult> Edit(int id, DoctorInsertionDTO doctorVM)
         {
             if (id != doctorVM.Id || !ModelState.IsValid)
             {
@@ -130,12 +130,12 @@ namespace HospitalSystemAPI.Controllers
                 return NotFound();
             }
 
-            GetDoctorVM DoctorObject = new GetDoctorVM()
+            GetDoctorDTO DoctorObject = new GetDoctorDTO()
             {
                 Id = doctor.Id,
                 Name = doctor.Name,
                 PhoneNumber = doctor.PhoneNumber,
-                speciality = doctor.Speciality.Name
+                Speciality = doctor.Speciality.Name
             };
             return View(DoctorObject);  // Return a confirmation view for deletion
         }
@@ -162,23 +162,23 @@ namespace HospitalSystemAPI.Controllers
             return _context.Doctors.Any(e => e.Id == id);
         }
 
-        private List<GetDoctorVM> getDoctorsVMobject(List<Doctor> doctors)
+        private List<GetDoctorDTO> getDoctorsVMobject(List<Doctor> doctors)
         {
-            List<GetDoctorVM> DoctorsObject = new List<GetDoctorVM>();
+            List<GetDoctorDTO> DoctorsObject = new List<GetDoctorDTO>();
             foreach (var doctor in doctors)
             {
-                DoctorsObject.Add(new GetDoctorVM()
+                DoctorsObject.Add(new GetDoctorDTO()
                 {
                     Id = doctor.Id,
                     Name = doctor.Name,
                     PhoneNumber = doctor.PhoneNumber,
-                    speciality = doctor.Speciality.Name
+                    Speciality = doctor.Speciality.Name
                 });
             }
             return DoctorsObject;
         }
 
-        private void MapVmToDoctor(DoctorInsertionVM doctorVM, Doctor doctor)
+        private void MapVmToDoctor(DoctorInsertionDTO doctorVM, Doctor doctor)
         {
             doctor.Id = doctorVM.Id;
             doctor.Name = doctorVM.Name;

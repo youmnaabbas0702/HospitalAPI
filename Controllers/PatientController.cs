@@ -50,7 +50,7 @@ namespace HospitalSystemAPI.Controllers
                 Id = patient.Id,
                 Name = patient.Name,
                 PhoneNumber = patient.PhoneNumber,
-                BirthDate = patient.BirthDate,
+                Age = patient.Age,
                 MedicalHistory = patient.MedicalHistory,
             };
             return PatientObject;
@@ -165,7 +165,7 @@ namespace HospitalSystemAPI.Controllers
                     Id = patient.Id,
                     Name = patient.Name,
                     PhoneNumber = patient.PhoneNumber,
-                    BirthDate = patient.BirthDate,
+                    Age = patient.Age,
                     MedicalHistory = patient.MedicalHistory,
                 });
             }
@@ -177,7 +177,7 @@ namespace HospitalSystemAPI.Controllers
             patient.Id = patientDto.Id;
             patient.Name = patientDto.Name;
             patient.PhoneNumber = patientDto.PhoneNumber;
-            patient.BirthDate = patientDto.BirthDate;
+            patient.Age = patientDto.Age;
         }
     }
 }

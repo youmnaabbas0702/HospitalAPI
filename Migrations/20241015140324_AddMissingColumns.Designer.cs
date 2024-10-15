@@ -4,6 +4,7 @@ using HospitalSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalSystemAPI.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241015140324_AddMissingColumns")]
+    partial class AddMissingColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,6 +329,33 @@ namespace HospitalSystemAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specialities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "General"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Emergency"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Pediatrics"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Cardiology"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Orthopedics"
+                        });
                 });
 
             modelBuilder.Entity("HospitalSystemAPI.Models.Appointment", b =>

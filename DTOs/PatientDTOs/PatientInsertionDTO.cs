@@ -15,9 +15,7 @@ namespace HospitalSystemAPI.DTOs.PatientDTOs
         [RegularExpression(@"^(01[0-2]\d{8}|0\d{1,2}\d{7})$", ErrorMessage = "Please write a valid Egyptian phone or mobile number.")]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Birth Date is required")]
-        [ValidBirthDate(ErrorMessage = "Please enter a valid birth date between 1920 and today.")]
-        public DateTime BirthDate { get; set; }
+        public int Age { get; set; }
 
     }
 }

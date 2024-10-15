@@ -13,8 +13,9 @@ namespace HospitalSystemAPI.DTOs
         [Required(ErrorMessage = "Phone number is required")]
         [RegularExpression(@"^(01[0-2]\d{8}|0\d{1,2}\d{7})$", ErrorMessage = "Please write a valid Egyptian phone or mobile number.")]
         public string PhoneNumber { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Age number is required")]
+        public int Age { get; set; }
 
-        [Required(ErrorMessage = "Speciality is required")]
         public int SpecialityId { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
