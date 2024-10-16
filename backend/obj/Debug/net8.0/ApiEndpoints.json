@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
+    "Method": "RegisterDoctor",
+    "RelativePath": "api/Account/register-doctor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "HospitalSystemAPI.DTOs.DoctorInsertionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
+    "Method": "RegisterPatient",
+    "RelativePath": "api/Account/register-patient",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "HospitalSystemAPI.DTOs.PatientDTOs.PatientInsertionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
     "Method": "GetAppointments",
     "RelativePath": "api/Appointment",
@@ -118,7 +150,7 @@
     "Parameters": [
       {
         "Name": "doctorId",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -144,7 +176,7 @@
     "Parameters": [
       {
         "Name": "patientId",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -206,7 +238,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -232,7 +264,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
@@ -253,7 +285,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -321,7 +353,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -396,32 +428,6 @@
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.PatientController",
-    "Method": "PostPatient",
-    "RelativePath": "api/Patient",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "patientDto",
-        "Type": "HospitalSystemAPI.DTOs.PatientDTOs.PatientInsertionDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "HospitalSystemAPI.Models.Patient",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.PatientController",
     "Method": "GetPatient",
     "RelativePath": "api/Patient/{id}",
     "HttpMethod": "GET",
@@ -430,7 +436,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -456,7 +462,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
@@ -477,7 +483,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -557,27 +563,6 @@
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.SpecialityController",
-    "Method": "PutSpeciality",
-    "RelativePath": "api/Speciality/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "speciality",
-        "Type": "HospitalSystemAPI.Models.Speciality",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.SpecialityController",
     "Method": "DeleteSpeciality",
     "RelativePath": "api/Speciality/{id}",
     "HttpMethod": "DELETE",
@@ -591,26 +576,5 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[HospitalSystemAPI.WeatherForecast, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetWeatherForecast"
   }
 ]

@@ -1,9 +1,10 @@
 ﻿using HospitalSystemAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalSystemAPI.Data
 {
-    public class HospitalDbContext: DbContext
+    public class HospitalDbContext: IdentityDbContext<ApplicationUser>
     {
         public HospitalDbContext(DbContextOptions<HospitalDbContext> options) :
             base(options)
@@ -32,12 +33,36 @@ namespace HospitalSystemAPI.Data
                 new Speciality { Id = 4, Name = "Cardiology" },
                 new Speciality { Id = 5, Name = "Orthopedics" }
             );
+            // Configure the Doctor and Speciality relationship
+            modelBuilder.Entity<Doctor>()
+                .HasOne(d => d.Speciality)
+                .WithMany(s => s.Doctors)
+                .HasForeignKey(d => d.SpecialityId)
+                .OnDelete(DeleteBehavior.SetNull);
 
-            // Seed Admins
-            modelBuilder.Entity<Admin>().HasData(
-                new Admin { Id = 1, UserName = "admin_general", Email = "admin_general@gmail.com", Password = "password123", SpecialityId = 1 },
-                new Admin { Id = 2, UserName = "admin_emergency", Email = "admin_emergency@gmail.com", Password = "password123", SpecialityId = 2 }
-            );
+            modelBuilder.Entity<Appointment>()
+        .HasOne(a => a.Patient)
+        .WithMany(p => p.Appointments)
+        .HasForeignKey(a => a.PatientId)
+        .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MedicalRecord>()
+        .HasOne(a => a.Patient)
+        .WithMany(p => p.MedicalRecords)
+        .HasForeignKey(a => a.PatientId)
+        .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull
+
+            modelBuilder.Entity<MedicalRecord>()
+                .HasOne(a => a.Doctor)
+                .WithMany(d => d.MedicalRecords)
+                .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Patient>()
             .Property(p => p.Id)

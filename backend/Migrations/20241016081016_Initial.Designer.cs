@@ -4,6 +4,7 @@ using HospitalSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalSystemAPI.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241016081016_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,19 +110,23 @@ namespace HospitalSystemAPI.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DoctorId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PatientId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId1");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientId1");
 
                     b.ToTable("Appointments");
                 });
@@ -135,8 +142,10 @@ namespace HospitalSystemAPI.Migrations
                     b.Property<int>("Day")
                         .HasColumnType("int");
 
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DoctorId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("EndTime")
@@ -147,7 +156,7 @@ namespace HospitalSystemAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId1");
 
                     b.ToTable("DoctorsSchedules");
                 });
@@ -189,8 +198,10 @@ namespace HospitalSystemAPI.Migrations
                     b.Property<int>("Day")
                         .HasColumnType("int");
 
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DoctorId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("EndTime")
@@ -201,7 +212,7 @@ namespace HospitalSystemAPI.Migrations
 
                     b.HasKey("ShiftId");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId1");
 
                     b.ToTable("EmergencySchedules");
                 });
@@ -218,8 +229,10 @@ namespace HospitalSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PatientId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("RecordDate")
@@ -231,7 +244,7 @@ namespace HospitalSystemAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientId1");
 
                     b.ToTable("MedicalHistories");
                 });
@@ -251,12 +264,16 @@ namespace HospitalSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DoctorId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PatientId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Prescription")
@@ -268,9 +285,9 @@ namespace HospitalSystemAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId1");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientId1");
 
                     b.ToTable("MedicalRecords");
                 });
@@ -499,15 +516,11 @@ namespace HospitalSystemAPI.Migrations
                 {
                     b.HasOne("HospitalSystemAPI.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DoctorId1");
 
                     b.HasOne("HospitalSystemAPI.Models.Patient", "Patient")
                         .WithMany("Appointments")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("PatientId1");
 
                     b.Navigation("Doctor");
 
@@ -518,9 +531,7 @@ namespace HospitalSystemAPI.Migrations
                 {
                     b.HasOne("HospitalSystemAPI.Models.Doctor", "Doctor")
                         .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DoctorId1");
 
                     b.Navigation("Doctor");
                 });
@@ -540,9 +551,7 @@ namespace HospitalSystemAPI.Migrations
                 {
                     b.HasOne("HospitalSystemAPI.Models.Doctor", "Doctor")
                         .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DoctorId1");
 
                     b.Navigation("Doctor");
                 });
@@ -551,24 +560,18 @@ namespace HospitalSystemAPI.Migrations
                 {
                     b.HasOne("HospitalSystemAPI.Models.Patient", null)
                         .WithMany("MedicalHistory")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PatientId1");
                 });
 
             modelBuilder.Entity("HospitalSystemAPI.Models.MedicalRecord", b =>
                 {
                     b.HasOne("HospitalSystemAPI.Models.Doctor", "Doctor")
                         .WithMany("MedicalRecords")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DoctorId1");
 
                     b.HasOne("HospitalSystemAPI.Models.Patient", "Patient")
                         .WithMany("MedicalRecords")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("PatientId1");
 
                     b.Navigation("Doctor");
 

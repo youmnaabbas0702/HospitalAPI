@@ -24,7 +24,7 @@ namespace HospitalSystemAPI.Controllers
 
         // GET: api/DoctorSchedule/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(int id)
+        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(string id)
         {
             var doctorSchedule = await _context.DoctorsSchedules.Include(s => s.Doctor).Where(s => s.DoctorId==id).ToListAsync();
 

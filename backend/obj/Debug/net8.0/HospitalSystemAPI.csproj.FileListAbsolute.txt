@@ -517,3 +517,8 @@ D:\web\API\HospitalSystemAPI\backend\obj\Debug\net8.0\refint\HospitalSystemAPI.d
 D:\web\API\HospitalSystemAPI\backend\obj\Debug\net8.0\HospitalSystemAPI.pdb
 D:\web\API\HospitalSystemAPI\backend\obj\Debug\net8.0\HospitalSystemAPI.genruntimeconfig.cache
 D:\web\API\HospitalSystemAPI\backend\obj\Debug\net8.0\ref\HospitalSystemAPI.dll
+D:\web\API\HospitalSystemAPI\backend\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\web\API\HospitalSystemAPI\backend\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\web\API\HospitalSystemAPI\backend\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\web\API\HospitalSystemAPI\backend\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+D:\web\API\HospitalSystemAPI\backend\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll

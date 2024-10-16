@@ -26,7 +26,7 @@ namespace HospitalSystemAPI.Controllers
         public async Task<ActionResult<IEnumerable<Speciality>>> GetSpecialities()
         {
             List<Speciality> specialitiesObject = new List<Speciality>();
-            var specialities = await _context.Specialities.ToListAsync();
+            var specialities = await _context.Specialities.Include(s => s.Doctors).ToListAsync();
 
             foreach (var speciality in specialities)
             {
@@ -42,7 +42,7 @@ namespace HospitalSystemAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Speciality>> GetSpeciality(int id)
         {
-            var speciality = await _context.Specialities.FindAsync(id);
+            var speciality = await _context.Specialities.Include(s=>s.Doctors).SingleOrDefaultAsync(s=>s.Id==id);
 
             if (speciality == null)
             {
@@ -50,37 +50,6 @@ namespace HospitalSystemAPI.Controllers
             }
 
             return speciality;
-        }
-
-        // PUT: api/Speciality/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSpeciality(int id, Speciality speciality)
-        {
-            if (id == 1 || id == 2)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(speciality).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SpecialityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/Speciality

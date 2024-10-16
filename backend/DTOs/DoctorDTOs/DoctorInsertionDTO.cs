@@ -4,8 +4,6 @@ namespace HospitalSystemAPI.DTOs
 {
     public class DoctorInsertionDTO
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Name is required")]
         [StringLength(100, MinimumLength = 10, ErrorMessage = "Name must be between 10 and 100 characters")]
         public string Name { get; set; } = string.Empty;

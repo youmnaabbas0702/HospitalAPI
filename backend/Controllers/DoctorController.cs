@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
 using HospitalSystemAPI.DTOs;
+using System.Numerics;
+using HospitalSystemAPI.Services;
 
 namespace HospitalSystemAPI.Controllers
 {
@@ -33,7 +35,7 @@ namespace HospitalSystemAPI.Controllers
             return DoctorsObject;
         }
 
-        //used with speciality and general admin authorization
+        //used with general admin authorization
         // GET: api/Doctor/Speciality/5
         [HttpGet("Speciality/{id}")]
         public async Task<ActionResult<IEnumerable<GetDoctorDTO>>> GetSpecialityDoctors(int id)
@@ -47,7 +49,7 @@ namespace HospitalSystemAPI.Controllers
         //used with admin or doctor authorization
         // GET: api/Doctor/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetDoctorDTO>> GetDoctor(int id)
+        public async Task<ActionResult<GetDoctorDTO>> GetDoctor(string id)
         {
             var doctor = await _context.Doctors.Include(d => d.Speciality).SingleOrDefaultAsync(d => d.Id == id);
             if (doctor == null)
@@ -65,11 +67,11 @@ namespace HospitalSystemAPI.Controllers
             return DoctorObject;
         }
 
-        //with general and specialization admin authorization
+        //with general admin authorization
         // PUT: api/Doctor/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctor(int id, DoctorInsertionDTO doctorDto)
+        public async Task<IActionResult> PutDoctor(string id, DoctorInsertionDTO doctorDto)
         {
             if (!ModelState.IsValid)
             {
@@ -140,14 +142,21 @@ namespace HospitalSystemAPI.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetDoctor", new { id = newDoctor.Id }, newDoctor);
+            var doctor = await _context.Doctors.Include(d => d.Speciality).SingleOrDefaultAsync(d => d.Id == newDoctor.Id);
+            GetDoctorDTO DoctorObject = new GetDoctorDTO()
+            {
+                Id = doctor.Id,
+                Name = doctor.Name,
+                PhoneNumber = doctor.PhoneNumber,
+                speciality = doctor.Speciality.Name
+            };
+            return CreatedAtAction("GetDoctor", new { id = newDoctor.Id }, DoctorObject);
         }
 
-        //with general and specialization admin authorization
+        //with general admin authorization
         // DELETE: api/Doctor/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDoctor(int id)
+        public async Task<IActionResult> DeleteDoctor(string id)
         {
             var doctor = await _context.Doctors.FindAsync(id);
             if (doctor == null)
@@ -161,7 +170,7 @@ namespace HospitalSystemAPI.Controllers
             return NoContent();
         }
 
-        private bool DoctorExists(int id)
+        private bool DoctorExists(string id)
         {
             return _context.Doctors.Any(e => e.Id == id);
         }
@@ -184,12 +193,12 @@ namespace HospitalSystemAPI.Controllers
 
         private void MapDtoToDoctor(DoctorInsertionDTO doctorDto, Doctor doctor)
         {
-            doctor.Id = doctorDto.Id;
+            
             doctor.Name = doctorDto.Name;
             doctor.PhoneNumber = doctorDto.PhoneNumber;
             doctor.SpecialityId = doctorDto.SpecialityId;
             doctor.Email = doctorDto.Email;
-            doctor.password = doctorDto.Password;
+            doctor.PasswordHash = doctorDto.Password;
         }
     }
 

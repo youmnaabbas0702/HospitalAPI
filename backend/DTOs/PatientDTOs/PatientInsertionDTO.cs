@@ -5,7 +5,6 @@ namespace HospitalSystemAPI.DTOs.PatientDTOs
 {
     public class PatientInsertionDTO
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
         [StringLength(100, MinimumLength = 10, ErrorMessage = "Name must be between 10 and 100 characters")]
@@ -18,6 +17,14 @@ namespace HospitalSystemAPI.DTOs.PatientDTOs
         [Required(ErrorMessage = "Birth Date is required")]
         [ValidBirthDate(ErrorMessage = "Please enter a valid birth date between 1920 and today.")]
         public DateTime BirthDate { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(15, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long")]
+        public string Password { get; set; } = string.Empty;
 
     }
 }
