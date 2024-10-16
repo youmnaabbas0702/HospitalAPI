@@ -33,6 +33,17 @@ namespace HospitalSystemAPI.Data
                 new Speciality { Id = 4, Name = "Cardiology" },
                 new Speciality { Id = 5, Name = "Orthopedics" }
             );
+
+            // Ensure the UserName is unique
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.UserName)
+                .IsUnique();
+
+            // Ensure the Email is unique
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
             // Configure the Doctor and Speciality relationship
             modelBuilder.Entity<Doctor>()
                 .HasOne(d => d.Speciality)
@@ -40,24 +51,28 @@ namespace HospitalSystemAPI.Data
                 .HasForeignKey(d => d.SpecialityId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            //appointment and patient relation
             modelBuilder.Entity<Appointment>()
         .HasOne(a => a.Patient)
         .WithMany(p => p.Appointments)
         .HasForeignKey(a => a.PatientId)
-        .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull
+        .OnDelete(DeleteBehavior.Restrict);
 
+            //appointment and doctor relation
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Doctor)
                 .WithMany(d => d.Appointments)
                 .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //medical record and patient relation
             modelBuilder.Entity<MedicalRecord>()
         .HasOne(a => a.Patient)
         .WithMany(p => p.MedicalRecords)
         .HasForeignKey(a => a.PatientId)
-        .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull
+        .OnDelete(DeleteBehavior.Restrict);
 
+            //medical record and doctor relation
             modelBuilder.Entity<MedicalRecord>()
                 .HasOne(a => a.Doctor)
                 .WithMany(d => d.MedicalRecords)

@@ -10,9 +10,12 @@ using HospitalSystemAPI.Models;
 using HospitalSystemAPI.DTOs.PatientDTOs;
 using HospitalSystemAPI.DTOs;
 using HospitalSystemAPI.Services;
+using System.Numerics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalSystemAPI.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class PatientController : ControllerBase
@@ -26,6 +29,7 @@ namespace HospitalSystemAPI.Controllers
             _generator = idGenerator;
         }
 
+        [Authorize]
         // GET: api/Patient
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPatientDTO>>> GetPatients()
@@ -52,6 +56,8 @@ namespace HospitalSystemAPI.Controllers
             {
                 Id = patient.Id,
                 Name = patient.Name,
+                UserName = patient.UserName,
+                Email = patient.Email,
                 PhoneNumber = patient.PhoneNumber,
                 BirthDate = patient.BirthDate,
                 MedicalHistories = patient.MedicalHistory.ToArray(),
@@ -129,6 +135,8 @@ namespace HospitalSystemAPI.Controllers
                 {
                     Id = patient.Id,
                     Name = patient.Name,
+                    UserName = patient.UserName,
+                    Email = patient.Email,
                     PhoneNumber = patient.PhoneNumber,
                     BirthDate = patient.BirthDate,
                     MedicalHistories = patient.MedicalHistory.ToArray(),
@@ -140,6 +148,7 @@ namespace HospitalSystemAPI.Controllers
         private void MapDtoToPatient(PatientInsertionDTO patientDto, Patient patient)
         {
             patient.Name = patientDto.Name;
+            patient.UserName = patientDto.UserName;
             patient.PhoneNumber = patientDto.PhoneNumber;
             patient.BirthDate = patientDto.BirthDate;
             patient.Email = patientDto.Email;

@@ -10,9 +10,12 @@ using HospitalSystemAPI.Models;
 using HospitalSystemAPI.DTOs;
 using System.Numerics;
 using HospitalSystemAPI.Services;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalSystemAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorController : ControllerBase
@@ -61,6 +64,8 @@ namespace HospitalSystemAPI.Controllers
             {
                 Id = doctor.Id,
                 Name = doctor.Name,
+                UserName = doctor.UserName,
+                Email = doctor.Email,
                 PhoneNumber = doctor.PhoneNumber,
                 speciality = doctor.Speciality.Name
             };
@@ -147,6 +152,8 @@ namespace HospitalSystemAPI.Controllers
             {
                 Id = doctor.Id,
                 Name = doctor.Name,
+                UserName = doctor.UserName,
+                Email = doctor.Email,
                 PhoneNumber = doctor.PhoneNumber,
                 speciality = doctor.Speciality.Name
             };
@@ -184,6 +191,8 @@ namespace HospitalSystemAPI.Controllers
                 {
                     Id = doctor.Id,
                     Name = doctor.Name,
+                    UserName = doctor.UserName,
+                    Email = doctor.Email,
                     PhoneNumber = doctor.PhoneNumber,
                     speciality = doctor.Speciality.Name
                 });
@@ -197,6 +206,8 @@ namespace HospitalSystemAPI.Controllers
             doctor.Name = doctorDto.Name;
             doctor.PhoneNumber = doctorDto.PhoneNumber;
             doctor.SpecialityId = doctorDto.SpecialityId;
+            doctor.UserName = doctorDto.UserName;
+            doctor.Email = doctorDto.Email;
             doctor.Email = doctorDto.Email;
             doctor.PasswordHash = doctorDto.Password;
         }

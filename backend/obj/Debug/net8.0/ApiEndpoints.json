@@ -1,6 +1,32 @@
 [
   {
     "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
+    "Method": "Login",
+    "RelativePath": "api/Account/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDTO",
+        "Type": "HospitalSystemAPI.DTOs.AccountDTOs.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
+    "Method": "Logout",
+    "RelativePath": "api/Account/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
     "Method": "RegisterDoctor",
     "RelativePath": "api/Account/register-doctor",
     "HttpMethod": "POST",
