@@ -27,6 +27,7 @@ namespace HospitalSystemAPI.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "genAdmin")]
         //used with general admin authorization
         // GET: api/Doctor
         [HttpGet]

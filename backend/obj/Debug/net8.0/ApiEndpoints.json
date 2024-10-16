@@ -1,32 +1,6 @@
 [
   {
     "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
-    "Method": "Login",
-    "RelativePath": "api/Account/login",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "loginDTO",
-        "Type": "HospitalSystemAPI.DTOs.AccountDTOs.LoginDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
-    "Method": "Logout",
-    "RelativePath": "api/Account/logout",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
     "Method": "RegisterDoctor",
     "RelativePath": "api/Account/register-doctor",
     "HttpMethod": "POST",
@@ -420,6 +394,85 @@
     "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
     "Method": "DeleteDoctorSchedule",
     "RelativePath": "api/DoctorSchedule/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.MedicalHistoryController",
+    "Method": "GetMedicalHistory",
+    "RelativePath": "api/MedicalHistory/{patientId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.MedicalRecordsController",
+    "Method": "AddMedicalRecord",
+    "RelativePath": "api/MedicalRecords",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "AppointmentId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "model",
+        "Type": "HospitalSystemAPI.MedicalRecordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.MedicalRecordsController",
+    "Method": "GetAllMedicalRecords",
+    "RelativePath": "api/MedicalRecords",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.MedicalRecordsController",
+    "Method": "GetMedicalRecordById",
+    "RelativePath": "api/MedicalRecords/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.MedicalRecordsController",
+    "Method": "DeleteMedicalRecord",
+    "RelativePath": "api/MedicalRecords/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,

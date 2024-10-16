@@ -2,6 +2,7 @@
 using HospitalSystemAPI.DTOs.AppointmentDTOs;
 using HospitalSystemAPI.DTOs.PatientDTOs;
 using HospitalSystemAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HospitalSystemAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AppointmentController : ControllerBase
@@ -28,15 +30,15 @@ namespace HospitalSystemAPI.Controllers
             List<ViewAppointments> viewlist=new List<ViewAppointments>();
             foreach(var item in appointment)
             {
-                //var app = new ViewAppointments
-                //{
-                //    PatientId = item.PatientId,
-                //    AppointmentId = item.Id,
-                //    AppointmentDate = item.AppointmentDate,
-                //   DoctorId=item.DoctorId,
+                var app = new ViewAppointments
+                {
+                    PatientId = item.PatientId,
+                    AppointmentId = item.Id,
+                    AppointmentDate = item.AppointmentDate,
+                    DoctorId = item.DoctorId,
 
-                //};
-                //viewlist.Add(app);
+                };
+                viewlist.Add(app);
             }
             return Ok(viewlist);
 

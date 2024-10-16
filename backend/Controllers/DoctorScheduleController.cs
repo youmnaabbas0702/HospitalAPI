@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
 using HospitalSystemAPI.DTOs.DoctorDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalSystemAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorScheduleController : ControllerBase

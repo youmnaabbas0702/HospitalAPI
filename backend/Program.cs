@@ -3,8 +3,11 @@ using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
 using HospitalSystemAPI.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace HospitalSystemAPI
 {
@@ -14,45 +17,52 @@ namespace HospitalSystemAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddDbContext<HospitalDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            // Bind JWT settings to the JWT class
+            builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
             // Add Identity services and configure to use ApplicationUser
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(/*options =>
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5; 
-                options.Lockout.AllowedForNewUsers = true;
-            }*/)
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
                 .AddEntityFrameworkStores<HospitalDbContext>()
                 .AddDefaultTokenProviders();
 
-            //// Configure cookie authentication for "Remember Me" functionality
-            //builder.Services.ConfigureApplicationCookie(options =>
-            //{
-            //    options.Cookie.HttpOnly = true; // Make cookies HttpOnly
-            //    options.ExpireTimeSpan = TimeSpan.FromDays(30); // Set cookie expiration (e.g., 30 days for "Remember Me")
-            //    options.SlidingExpiration = true; // Extend session if the user is active
-            //});
+            //Add DbContext class
+            builder.Services.AddDbContext<HospitalDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            builder.Services.AddControllers();
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IIdGenerator, IdGenerator>();
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-             .AddCookie(options =>
-             {
-                 // Set the LoginPath to null to avoid redirection
-                 options.LoginPath = null;
-
-                 // Set the AccessDeniedPath to null if you want to avoid redirection for access denied as well
-                 options.AccessDeniedPath = null;
-             });
+            
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(o =>
+                {
+                    o.RequireHttpsMetadata = false;
+                    o.SaveToken = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = builder.Configuration["JWT:Issuer"],
+                        ValidAudience = builder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+                    };
+                });
 
             builder.Services.AddAuthorization();
 
