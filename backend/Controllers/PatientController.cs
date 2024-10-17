@@ -29,7 +29,7 @@ namespace HospitalSystemAPI.Controllers
             _generator = idGenerator;
         }
 
-        [Authorize]
+        [Authorize(Roles = "genAdmin")]
         // GET: api/Patient
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPatientDTO>>> GetPatients()
@@ -65,6 +65,7 @@ namespace HospitalSystemAPI.Controllers
             return PatientObject;
         }
 
+        [Authorize(Roles = "genAdmin")]
         // PUT: api/Patient/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -105,6 +106,7 @@ namespace HospitalSystemAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "genAdmin")]
         // DELETE: api/Patient/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(string id)

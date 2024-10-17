@@ -2,13 +2,12 @@
 using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
 using HospitalSystemAPI.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using HospitalSystemAPI.Services.Authentication;
 namespace HospitalSystemAPI
 {
     public class Program
@@ -42,7 +41,8 @@ namespace HospitalSystemAPI
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IIdGenerator, IdGenerator>();
-            
+            builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

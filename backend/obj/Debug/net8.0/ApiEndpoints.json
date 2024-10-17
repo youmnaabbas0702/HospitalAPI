@@ -32,6 +32,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "HospitalSystemAPI.Controllers.AccountController",
+    "Method": "GetToken",
+    "RelativePath": "api/Account/token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "HospitalSystemAPI.DTOs.AccountDTOs.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
     "Method": "GetAppointments",
     "RelativePath": "api/Appointment",
@@ -211,22 +227,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",
-    "Method": "PostDoctor",
-    "RelativePath": "api/Doctor",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "doctorDto",
-        "Type": "HospitalSystemAPI.DTOs.DoctorInsertionDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.DoctorController",

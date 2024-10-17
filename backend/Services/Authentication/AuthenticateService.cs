@@ -6,22 +6,24 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
+using HospitalSystemAPI.DTOs.AccountDTOs;
 
-namespace HospitalSystemAPI.Services
+namespace HospitalSystemAPI.Services.Authentication
 {
-    public class AuthenticationService
+    public class AuthenticateService: IAuthenticateService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IIdGenerator _idGenerator;
         private readonly JWT _jwt;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IIdGenerator idGenerator, JWT jwt)
+        public AuthenticateService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IIdGenerator idGenerator, IOptions<JWT> jwt)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _idGenerator = idGenerator;
-            _jwt = jwt;
+            _jwt = jwt.Value;
         }
 
         public async Task<AuthenticationObject> RegisterDoctorAsync(DoctorInsertionDTO dto)
@@ -118,6 +120,31 @@ namespace HospitalSystemAPI.Services
             };
         }
 
+        //login logic
+        public async Task<AuthenticationObject> GetTokenAsync(LoginDTO loginDto)
+        {
+            var AuthModel = new AuthenticationObject();
+            var user = await _userManager.FindByNameAsync(loginDto.UserName) ?? await _userManager.FindByEmailAsync(loginDto.UserName);
+
+            if (user is null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+            {
+                AuthModel.Message = "Email/UserName or Password is Incorrect";
+                return AuthModel;
+            }
+
+            var jwtSecurityToken = await CreateJwtToken(user);
+            AuthModel.IsAuthenticated = true;
+            AuthModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            AuthModel.Email = user.Email;
+            AuthModel.UserName = user.UserName;
+            AuthModel.ExpiresOn = jwtSecurityToken.ValidTo;
+
+            var roles = await _userManager.GetRolesAsync(user);
+            AuthModel.Role = roles.FirstOrDefault();
+
+            return AuthModel;
+        }
+
         // JWT Token creation logic
         private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
         {
@@ -153,5 +180,4 @@ namespace HospitalSystemAPI.Services
             return jwtSecurityToken;
         }
     }
-
 }

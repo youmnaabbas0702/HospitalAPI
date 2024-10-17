@@ -24,6 +24,7 @@ namespace HospitalSystemAPI.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "genAdmin,Doctor")]
         // GET: api/DoctorSchedule/5
         [HttpGet("{id}")]
         public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(string id)
@@ -44,6 +45,7 @@ namespace HospitalSystemAPI.Controllers
             return ScheduleObject;
         }
 
+        [Authorize(Roles = "genAdmin")]
         // PUT: api/DoctorSchedule/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -75,6 +77,7 @@ namespace HospitalSystemAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "genAdmin")]
         // POST: api/DoctorSchedule
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -86,6 +89,7 @@ namespace HospitalSystemAPI.Controllers
             return CreatedAtAction("GetDoctorSchedule", new { id = doctorSchedule.Id }, doctorSchedule);
         }
 
+        [Authorize(Roles = "genAdmin")]
         // DELETE: api/DoctorSchedule/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDoctorSchedule(int id)

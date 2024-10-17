@@ -2,17 +2,10 @@
 using HospitalSystemAPI.DTOs;
 using HospitalSystemAPI.DTOs.AccountDTOs;
 using HospitalSystemAPI.DTOs.PatientDTOs;
-using HospitalSystemAPI.Models;
-using HospitalSystemAPI.Services;
+using HospitalSystemAPI.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace HospitalSystemAPI.Controllers
 {
@@ -20,17 +13,22 @@ namespace HospitalSystemAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly AuthenticationService _authService;
+        private readonly IAuthenticateService _authService;
 
-        public AccountController(AuthenticationService authService)
+        public AccountController(IAuthenticateService authService)
         {
             _authService = authService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "genAdmin")]
         [HttpPost("register-doctor")]
         public async Task<IActionResult> RegisterDoctor([FromBody] DoctorInsertionDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _authService.RegisterDoctorAsync(dto);
             if (!result.IsAuthenticated)
             {
@@ -40,17 +38,39 @@ namespace HospitalSystemAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "genAdmin")]
         [HttpPost("register-patient")]
         public async Task<IActionResult> RegisterPatient([FromBody] PatientInsertionDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _authService.RegisterPatientAsync(dto);
             if (!result.IsAuthenticated)
             {
                 return BadRequest(result.Message);
             }
 
-            return Ok(result);
+            return Ok(new {Token = result.Token, ExpiresOn = result.ExpiresOn});
+        }
+
+        [HttpPost("token")]
+        public async Task<IActionResult> GetToken([FromBody] LoginDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _authService.GetTokenAsync(dto);
+            if (!result.IsAuthenticated)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(new { Token = result.Token, ExpiresOn = result.ExpiresOn });
         }
     }
 
