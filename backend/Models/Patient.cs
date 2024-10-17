@@ -1,4 +1,6 @@
-﻿namespace HospitalSystemAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HospitalSystemAPI.Models
 {
     public class Patient: ApplicationUser
     {

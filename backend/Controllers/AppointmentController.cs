@@ -60,36 +60,73 @@ namespace HospitalSystemAPI.Controllers
 
         // 3. Add New Appointment
         [HttpPost]
-        public async Task<ActionResult<Appointment>> PostAppointment(NewAppointment appointment)
-        {
-            //appointmentDTO.PatientExixst = exist;
-            //if (appointmentDTO.PatientExixst)
-            //{
-            //    var patient = _context.Patients.FirstOrDefault(p => p.Id == appointmentDTO.PatientId);
-            //    if (patient == null)
-            //    {
-            //        return BadRequest("Not Found");
+        public async Task<ActionResult<Appointment>> PostAppointment(NewAppointment newappointment)
+        { 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            //    }
-            //    else
-            //    {
-            //        patient.Appointments.Add(new Appointment());
-            //        return Ok("Added ");
-            //    }
-            //}
-            //Create a new appointment
-            //var newAppointment = new Appointment
-            //{
-            //    Id = appointment.AppointmentId,
-            //    AppointmentDate = appointment.AppointmentDate,
-            //    Doctor =_context.Doctors.FirstOrDefault(d=>d.Id == appointment.DoctorId),
-            //    Patient=_context.Patients.FirstOrDefault(p=>p.Id==appointment.PatientId),
-            //};
+            var patientExists = await _context.Patients
+                .AnyAsync(p => p.Id == newappointment.PatientId);
 
-            //_context.Appointments.Add(newAppointment);
+            if (!patientExists)
+            {
+                return NotFound(new { Message = "Patient does not exist" });
+            }
+
+            var doctorExists = await _context.Doctors
+                .AnyAsync(d => d.Id == newappointment.DoctorId);
+
+            if (!doctorExists)
+            {
+                return NotFound(new { Message = "Doctor does not exist" });
+            }
+
+            
+            var appointment = new Appointment
+            {
+                Id = newappointment.AppointmentId,
+                PatientId = newappointment.PatientId,
+                DoctorId = newappointment.DoctorId,
+                AppointmentDate = newappointment.AppointmentDate
+            };
+
+            
+            _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
-            return Ok("Created");
+           
+            return Ok("Created Successfuly");
+        
+        //appointmentDTO.PatientExixst = exist;
+        //if (appointmentDTO.PatientExixst)
+        //{
+        //    var patient = _context.Patients.FirstOrDefault(p => p.Id == appointmentDTO.PatientId);
+        //    if (patient == null)
+        //    {
+        //        return BadRequest("Not Found");
+
+        //    }
+        //    else
+        //    {
+        //        patient.Appointments.Add(new Appointment());
+        //        return Ok("Added ");
+        //    }
+        //}
+        //Create a new appointment
+        //var newAppointment = new Appointment
+        //{
+        //    Id = appointment.AppointmentId,
+        //    AppointmentDate = appointment.AppointmentDate,
+        //    Doctor =_context.Doctors.FirstOrDefault(d=>d.Id == appointment.DoctorId),
+        //    Patient=_context.Patients.FirstOrDefault(p=>p.Id==appointment.PatientId),
+        //};
+
+        //_context.Appointments.Add(newAppointment);
+        //await _context.SaveChangesAsync();
+
+        //    return Ok("Created");
         }
 
         // 4. Get Appointments by Doctor ID
