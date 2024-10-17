@@ -5,7 +5,7 @@ namespace HospitalSystemAPI.DTOs.AppointmentDTOs
 {
     public class NewAppointment
     {
-        //public bool PatientExixst;
+        public bool PatientExixst;
         public string PatientId {  get; set; }
         public int AppointmentId { get; set; }
         public DateTime AppointmentDate { get; set; }
