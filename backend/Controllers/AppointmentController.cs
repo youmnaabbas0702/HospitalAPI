@@ -2,6 +2,7 @@
 using HospitalSystemAPI.DTOs.AppointmentDTOs;
 using HospitalSystemAPI.DTOs.PatientDTOs;
 using HospitalSystemAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HospitalSystemAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AppointmentController : ControllerBase
@@ -33,7 +35,7 @@ namespace HospitalSystemAPI.Controllers
                     PatientId = item.PatientId,
                     AppointmentId = item.Id,
                     AppointmentDate = item.AppointmentDate,
-                   DoctorId=item.DoctorId,
+                    DoctorId = item.DoctorId,
 
                 };
                 viewlist.Add(app);
@@ -75,16 +77,16 @@ namespace HospitalSystemAPI.Controllers
             //        return Ok("Added ");
             //    }
             //}
-            // Create a new appointment
-            var newAppointment = new Appointment
-            {
-                Id = appointment.AppointmentId,
-                AppointmentDate = appointment.AppointmentDate,
-                Doctor =_context.Doctors.FirstOrDefault(d=>d.Id == appointment.DoctorId),
-                Patient=_context.Patients.FirstOrDefault(p=>p.Id==appointment.PatientId),
-            };
+            //Create a new appointment
+            //var newAppointment = new Appointment
+            //{
+            //    Id = appointment.AppointmentId,
+            //    AppointmentDate = appointment.AppointmentDate,
+            //    Doctor =_context.Doctors.FirstOrDefault(d=>d.Id == appointment.DoctorId),
+            //    Patient=_context.Patients.FirstOrDefault(p=>p.Id==appointment.PatientId),
+            //};
 
-            _context.Appointments.Add(newAppointment);
+            //_context.Appointments.Add(newAppointment);
             await _context.SaveChangesAsync();
 
             return Ok("Created");
@@ -92,7 +94,7 @@ namespace HospitalSystemAPI.Controllers
 
         // 4. Get Appointments by Doctor ID
         [HttpGet("byDoctor/{doctorId}")]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsByDoctor(int doctorId)
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsByDoctor(string doctorId)
         {
             return await _context.Appointments
                 .Where(a => a.DoctorId == doctorId)
@@ -101,7 +103,7 @@ namespace HospitalSystemAPI.Controllers
 
         // 5. Get Appointments by Patient ID
         [HttpGet("byPatient/{patientId}")]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsByPatient(int patientId)
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsByPatient(string patientId)
         {
             return await _context.Appointments
                 .Where(a => a.PatientId == patientId)

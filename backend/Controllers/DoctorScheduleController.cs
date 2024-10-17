@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
 using HospitalSystemAPI.DTOs.DoctorDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalSystemAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorScheduleController : ControllerBase
@@ -22,9 +24,10 @@ namespace HospitalSystemAPI.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "genAdmin,Doctor")]
         // GET: api/DoctorSchedule/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(int id)
+        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(string id)
         {
             var doctorSchedule = await _context.DoctorsSchedules.Include(s => s.Doctor).Where(s => s.DoctorId==id).ToListAsync();
 
@@ -42,6 +45,7 @@ namespace HospitalSystemAPI.Controllers
             return ScheduleObject;
         }
 
+        [Authorize(Roles = "genAdmin")]
         // PUT: api/DoctorSchedule/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -73,6 +77,7 @@ namespace HospitalSystemAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "genAdmin")]
         // POST: api/DoctorSchedule
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -84,6 +89,7 @@ namespace HospitalSystemAPI.Controllers
             return CreatedAtAction("GetDoctorSchedule", new { id = doctorSchedule.Id }, doctorSchedule);
         }
 
+        [Authorize(Roles = "genAdmin")]
         // DELETE: api/DoctorSchedule/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDoctorSchedule(int id)
