@@ -34,7 +34,7 @@ namespace HospitalSystemAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPatientDTO>>> GetPatients()
         {
-            var patients = await _context.Patients.Include(p => p.MedicalHistory).ToListAsync();
+            var patients = await _context.Patients.ToListAsync();
 
             List<GetPatientDTO> PatientsObject = getPatientsDTOobject(patients);
 
@@ -45,7 +45,7 @@ namespace HospitalSystemAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPatientDTO>> GetPatient(string id)
         {
-            var patient = await _context.Patients.Include(p => p.MedicalHistory).FirstOrDefaultAsync(p => p.Id == id);
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
 
             if (patient == null)
             {
@@ -59,8 +59,7 @@ namespace HospitalSystemAPI.Controllers
                 UserName = patient.UserName,
                 Email = patient.Email,
                 PhoneNumber = patient.PhoneNumber,
-                BirthDate = patient.BirthDate,
-                MedicalHistories = patient.MedicalHistory.ToArray(),
+                BirthDate = patient.BirthDate
             };
             return PatientObject;
         }
@@ -69,7 +68,7 @@ namespace HospitalSystemAPI.Controllers
         // PUT: api/Patient/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPatient(string id, PatientInsertionDTO patientDto)
+        public async Task<IActionResult> PutPatient(string id, EditPatientDTO patientDto)
         {
             if (!ModelState.IsValid)
             {
@@ -82,28 +81,12 @@ namespace HospitalSystemAPI.Controllers
                 return NotFound();
             }
 
-            // Call the private method to map DTO to the entity
-            MapDtoToPatient(patientDto, existingPatient);
+            existingPatient.UserName = patientDto.UserName;
+            existingPatient.Email = patientDto.Email;
+            existingPatient.PasswordHash = patientDto.Password;
+            existingPatient.PhoneNumber = patientDto.PhoneNumber;
 
-            _context.Entry(existingPatient).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PatientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok("patient edited");
         }
 
         [Authorize(Roles = "genAdmin")]
@@ -140,8 +123,7 @@ namespace HospitalSystemAPI.Controllers
                     UserName = patient.UserName,
                     Email = patient.Email,
                     PhoneNumber = patient.PhoneNumber,
-                    BirthDate = patient.BirthDate,
-                    MedicalHistories = patient.MedicalHistory.ToArray(),
+                    BirthDate = patient.BirthDate
                 });
             }
             return PatientsObject;

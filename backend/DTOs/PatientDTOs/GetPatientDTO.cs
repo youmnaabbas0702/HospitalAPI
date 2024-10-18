@@ -10,6 +10,6 @@ namespace HospitalSystemAPI.DTOs.PatientDTOs
         public string Email { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
-        public MedicalHistory[] MedicalHistories { get; set; } = default!;
+        //public MedicalHistory[] MedicalHistories { get; set; } = default!;
     }
 }

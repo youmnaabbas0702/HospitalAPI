@@ -535,7 +535,7 @@
       },
       {
         "Name": "patientDto",
-        "Type": "HospitalSystemAPI.DTOs.PatientDTOs.PatientInsertionDTO",
+        "Type": "HospitalSystemAPI.DTOs.PatientDTOs.EditPatientDTO",
         "IsRequired": true
       }
     ],
