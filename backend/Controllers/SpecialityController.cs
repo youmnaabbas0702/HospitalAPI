@@ -38,19 +38,19 @@ namespace HospitalSystemAPI.Controllers
             return specialitiesObject;
         }
 
-        // GET: api/Speciality/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Speciality>> GetSpeciality(int id)
-        {
-            var speciality = await _context.Specialities.Include(s=>s.Doctors).SingleOrDefaultAsync(s=>s.Id==id);
+        //// GET: api/Speciality/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Speciality>> GetSpeciality(int id)
+        //{
+        //    var speciality = await _context.Specialities.Include(s=>s.Doctors).SingleOrDefaultAsync(s=>s.Id==id);
 
-            if (speciality == null)
-            {
-                return NotFound();
-            }
+        //    if (speciality == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return speciality;
-        }
+        //    return speciality;
+        //}
 
         // POST: api/Speciality
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

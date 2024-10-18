@@ -98,23 +98,5 @@ namespace HospitalSystemAPI.Controllers
 
             return Ok(record);
         }
-
-        //Delete record for patient by id for patient
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMedicalRecord(int id)
-        {
-            var record = await _context.MedicalRecords.FindAsync(id);
-            if (record == null)
-            {
-                return NotFound("Medical record not found");
-            }
-
-            _context.MedicalRecords.Remove(record);
-            await _context.SaveChangesAsync();
-
-            return Ok("Medical record deleted successfully");
-        }
-    }
-
-      
-    }
+    } 
+}

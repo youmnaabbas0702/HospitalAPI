@@ -76,7 +76,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "appointment",
+        "Name": "newappointment",
         "Type": "HospitalSystemAPI.DTOs.AppointmentDTOs.NewAppointment",
         "IsRequired": true
       }
@@ -118,27 +118,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
-    "Method": "PatchAppointment",
-    "RelativePath": "api/Appointment/{id}",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "patchDoc",
-        "Type": "Microsoft.AspNetCore.JsonPatch.JsonPatchDocument\u00601[[HospitalSystemAPI.Models.Appointment, HospitalSystemAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.AppointmentController",
@@ -326,8 +305,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "doctorSchedule",
-        "Type": "HospitalSystemAPI.Models.DoctorSchedule",
+        "Name": "scheduleDto",
+        "Type": "HospitalSystemAPI.DTOs.DoctorDTOs.AddScheduleDTO",
         "IsRequired": true
       }
     ],
@@ -345,14 +324,14 @@
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
-    "Method": "GetDoctorSchedules",
-    "RelativePath": "api/DoctorSchedule/{id}",
+    "Method": "GetDoctorSchedule",
+    "RelativePath": "api/DoctorSchedule/{doctorId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "doctorId",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -371,7 +350,7 @@
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
-    "Method": "PutDoctorSchedule",
+    "Method": "UpdateDoctorSchedule",
     "RelativePath": "api/DoctorSchedule/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -383,12 +362,22 @@
         "IsRequired": true
       },
       {
-        "Name": "doctorSchedule",
-        "Type": "HospitalSystemAPI.Models.DoctorSchedule",
+        "Name": "updateScheduleDto",
+        "Type": "HospitalSystemAPI.DTOs.DoctorDTOs.UpdateScheduleTimeDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "HospitalSystemAPI.DTOs.DoctorDTOs.DoctorScheduleDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "HospitalSystemAPI.Controllers.DoctorScheduleController",
@@ -401,6 +390,22 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HospitalSystemAPI.Controllers.MedicalHistoryController",
+    "Method": "AddMedicalHistory",
+    "RelativePath": "api/MedicalHistory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "newHistory",
+        "Type": "HospitalSystemAPI.Models.MedicalHistory",
         "IsRequired": true
       }
     ],
@@ -458,22 +463,6 @@
     "Method": "GetMedicalRecordById",
     "RelativePath": "api/MedicalRecords/{id}",
     "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.MedicalRecordsController",
-    "Method": "DeleteMedicalRecord",
-    "RelativePath": "api/MedicalRecords/{id}",
-    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -599,32 +588,6 @@
       {
         "Name": "speciality",
         "Type": "HospitalSystemAPI.Models.Speciality",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "HospitalSystemAPI.Models.Speciality",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "HospitalSystemAPI.Controllers.SpecialityController",
-    "Method": "GetSpeciality",
-    "RelativePath": "api/Speciality/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

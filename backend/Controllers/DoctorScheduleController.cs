@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalSystemAPI.Data;
@@ -25,64 +21,88 @@ namespace HospitalSystemAPI.Controllers
         }
 
         [Authorize(Roles = "genAdmin,Doctor")]
-        // GET: api/DoctorSchedule/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedules(string id)
+        // GET: api/DoctorSchedule/{doctorId}
+        [HttpGet("{doctorId}")]
+        public async Task<ActionResult<List<DoctorScheduleDTO>>> GetDoctorSchedule(string doctorId)
         {
-            var doctorSchedule = await _context.DoctorsSchedules.Include(s => s.Doctor).Where(s => s.DoctorId==id).ToListAsync();
+            var schedules = await _context.DoctorsSchedules
+                .Where(s => s.DoctorId == doctorId)
+                .ToListAsync();
 
-            if (doctorSchedule == null)
+            if (schedules == null || schedules.Count == 0)
             {
-                return NotFound();
+                return NotFound("No schedules found for this doctor.");
             }
 
-            var ScheduleObject = new List<DoctorScheduleDTO>();
-
-            foreach(var schedule in doctorSchedule)
+            var scheduleObjects = schedules.Select(schedule => new DoctorScheduleDTO
             {
-                ScheduleObject.Add(new DoctorScheduleDTO() { DoctorName = schedule.Doctor.Name, Day = schedule.Day, StartTime = schedule.StartTime, EndTime = schedule.EndTime });
-            }
-            return ScheduleObject;
+                Day = schedule.Day.ToString(),
+                StartTime = schedule.StartTime.ToString(@"hh\:mm\:ss"), // Format TimeSpan to "HH:mm:ss"
+                EndTime = schedule.EndTime.ToString(@"hh\:mm\:ss")      // Format TimeSpan to "HH:mm:ss"
+            }).ToList();
+
+            return Ok(scheduleObjects);
         }
 
         [Authorize(Roles = "genAdmin")]
-        // PUT: api/DoctorSchedule/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctorSchedule(int id, DoctorSchedule doctorSchedule)
+        public async Task<ActionResult<DoctorScheduleDTO>> UpdateDoctorSchedule(int id, [FromBody] UpdateScheduleTimeDTO updateScheduleDto)
         {
-            if (id != doctorSchedule.Id)
+            // Find the existing schedule by its ID
+            var existingSchedule = await _context.DoctorsSchedules.FindAsync(id);
+
+            if (existingSchedule == null)
             {
-                return BadRequest();
+                return NotFound("Schedule not found");
             }
 
-            _context.Entry(doctorSchedule).State = EntityState.Modified;
-
-            try
+            // Parse the StartTime and EndTime from string to TimeSpan
+            if (!TimeSpan.TryParse(updateScheduleDto.StartTime, out TimeSpan startTime))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DoctorScheduleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("Invalid Start Time format. Please use HH:mm:ss.");
             }
 
-            return NoContent();
+            if (!TimeSpan.TryParse(updateScheduleDto.EndTime, out TimeSpan endTime))
+            {
+                return BadRequest("Invalid End Time format. Please use HH:mm:ss.");
+            }
+
+            // Update only the StartTime and EndTime
+            existingSchedule.StartTime = startTime;
+            existingSchedule.EndTime = endTime;
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return Ok("Schedule updated successfully");
         }
 
+
+
         [Authorize(Roles = "genAdmin")]
-        // POST: api/DoctorSchedule
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DoctorSchedule>> PostDoctorSchedule(DoctorSchedule doctorSchedule)
+        public async Task<ActionResult<DoctorSchedule>> PostDoctorSchedule(AddScheduleDTO scheduleDto)
         {
+            // Try to parse the time strings into TimeSpan
+            if (!TimeSpan.TryParse(scheduleDto.StartTime, out TimeSpan startTime))
+            {
+                return BadRequest("Invalid Start Time format. Please use HH:mm:ss.");
+            }
+
+            if (!TimeSpan.TryParse(scheduleDto.EndTime, out TimeSpan endTime))
+            {
+                return BadRequest("Invalid End Time format. Please use HH:mm:ss.");
+            }
+
+            // Create a new DoctorSchedule object
+            var doctorSchedule = new DoctorSchedule
+            {
+                DoctorId = scheduleDto.DoctorId,
+                Day = Enum.Parse<DayOfWeek>(scheduleDto.Day), // Ensure Day is a valid DayOfWeek enum
+                StartTime = startTime,
+                EndTime = endTime
+            };
+
             _context.DoctorsSchedules.Add(doctorSchedule);
             await _context.SaveChangesAsync();
 
@@ -104,11 +124,6 @@ namespace HospitalSystemAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool DoctorScheduleExists(int id)
-        {
-            return _context.DoctorsSchedules.Any(e => e.Id == id);
         }
     }
 }
