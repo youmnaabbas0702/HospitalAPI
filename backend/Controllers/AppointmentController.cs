@@ -25,7 +25,7 @@ namespace HospitalSystemAPI.Controllers
 
         // 1. Get All Appointments (Admin Only, ordered by nearest to furthest)
         [HttpGet]
-        [Authorize(Roles = "Admin")] // Allow only Admins
+        [Authorize(Roles = "genAdmin")] // Allow only Admins
         public async Task<ActionResult<IEnumerable<ViewAppointments>>> GetAppointments()
         {
             var appointment = await _context.Appointments
@@ -39,7 +39,6 @@ namespace HospitalSystemAPI.Controllers
                 var app = new ViewAppointments
                 {
                     PatientId = item.PatientId,
-                    AppointmentId = item.Id,
                     AppointmentDate = item.AppointmentDate,
                     DoctorId = item.DoctorId,
                 };
@@ -50,10 +49,14 @@ namespace HospitalSystemAPI.Controllers
 
         // 2. Get Appointment by ID (Admin/Doctor for their own appointments)
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Doctor")]  // Only Admin or Doctor
+        [Authorize(Roles = "genAdmin,Doctor")]  // Only Admin or Doctor
         public async Task<ActionResult<Appointment>> GetAppointment(int id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
+            var appointment = await _context.Appointments
+                .Include(a => a.Patient)
+                .Include(a=>a.Doctor)
+                .FirstOrDefaultAsync(a=>a.Id == id);
+                ;
             if (appointment == null) return NotFound();
 
             // Restrict doctor to their own appointments
@@ -63,12 +66,20 @@ namespace HospitalSystemAPI.Controllers
                 return Forbid();  // Doctor can only view their appointments
             }
 
-            return Ok(appointment);
+            var appointmentObject = new ViewAppointments()
+            {
+                DoctorId = appointment.DoctorId,
+                PatientId = appointment.PatientId,
+                AppointmentDate = appointment.AppointmentDate,
+                DoctortName = appointment.Doctor.Name,
+                PatientName = appointment.Patient.Name
+            };
+            return Ok(appointmentObject);
         }
 
         // 3. Add New Appointment (Admin only)
         [HttpPost]
-        [Authorize(Roles = "Admin")]  // Only Admin can create appointments
+        [Authorize(Roles = "genAdmin")]  // Only Admin can create appointments
         public async Task<ActionResult<Appointment>> PostAppointment(NewAppointment newappointment)
         {
             if (!ModelState.IsValid)
@@ -108,7 +119,6 @@ namespace HospitalSystemAPI.Controllers
             // Proceed to create the new appointment
             var appointment = new Appointment
             {
-                Id = newappointment.AppointmentId,
                 PatientId = newappointment.PatientId,
                 DoctorId = newappointment.DoctorId,
                 AppointmentDate = newappointment.AppointmentDate
@@ -123,56 +133,68 @@ namespace HospitalSystemAPI.Controllers
 
         // 4. Get Appointments by Doctor ID (Doctor can only access their appointments)
         [HttpGet("byDoctor/{doctorId}")]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "genAdmin,Doctor")]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsByDoctor(string doctorId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (doctorId != userId) return Forbid();  // Doctors can only view their appointments
+            if (User.IsInRole("Doctor") && doctorId != userId) return Forbid();  // Doctors can only view their appointments
 
-            return await _context.Appointments
+            var appointments = await _context.Appointments
                 .Where(a => a.DoctorId == doctorId)
+                .Include(a=>a.Patient)
+                .Include(a=>a.Doctor)
                 .OrderBy(a => a.AppointmentDate)
                 .ToListAsync();
+            var appointmentsObject = new List<ViewAppointments>();
+            foreach (var appointment in appointments)
+            {
+                appointmentsObject.Add(new ViewAppointments
+                {
+                    PatientId = appointment.PatientId,
+                    DoctorId = appointment.DoctorId,
+                    AppointmentDate = appointment.AppointmentDate,
+                    PatientName = appointment.Patient.Name,
+                    DoctortName = appointment.Doctor.Name
+                });
+            }
+
+            return Ok(appointmentsObject);
         }
 
         // 5. Get Appointments by Patient ID (Patient can only access their own appointments)
         [HttpGet("byPatient/{patientId}")]
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "genAdmin,Patient")]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointmentsByPatient(string patientId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (patientId != userId) return Forbid();  // Patients can only view their appointments
+            if (User.IsInRole("Patient") && patientId != userId) return Forbid();  // Patients can only view their appointments
 
-            return await _context.Appointments
+            var Appointments = await _context.Appointments
                 .Where(a => a.PatientId == patientId)
+                .Include(a=>a.Patient)
+                .Include(a=>a.Doctor)
                 .OrderBy(a => a.AppointmentDate)
                 .ToListAsync();
+
+            var appointmentsObject = new List<ViewAppointments>();
+            foreach (var appointment in Appointments)
+            {
+                appointmentsObject.Add(new ViewAppointments
+                {
+                    PatientId = appointment.PatientId,
+                    DoctorId = appointment.DoctorId,
+                    AppointmentDate = appointment.AppointmentDate,
+                    PatientName = appointment.Patient.Name,
+                    DoctortName = appointment.Doctor.Name
+                });
+            }
+
+            return Ok(appointmentsObject);
         }
-
-        //// 6. Update an Appointment (Admin/Doctor for their appointments)
-        //[HttpPatch("{id}")]
-        //[Authorize(Roles = "Admin,Doctor")]
-        //public async Task<IActionResult> PatchAppointment(int id, [FromBody] JsonPatchDocument<Appointment> patchDoc)
-        //{
-        //    if (patchDoc == null) return BadRequest();
-
-        //    var appointment = await _context.Appointments.FindAsync(id);
-        //    if (appointment == null) return NotFound();
-
-        //    // Restrict Doctor to updating only their appointments
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    if (User.IsInRole("Doctor") && appointment.DoctorId != userId) return Forbid();
-
-        //    patchDoc.ApplyTo(appointment);
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        //    await _context.SaveChangesAsync();
-        //    return NoContent();
-        //}
 
         // 7. Delete an Appointment (Admin Only)
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]  // Only Admin can delete appointments
+        [Authorize(Roles = "genAdmin")]  // Only Admin can delete appointments
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);

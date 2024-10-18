@@ -19,19 +19,22 @@ namespace HospitalSystemAPI.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
-        public DbSet<EmergencySchedule> EmergencySchedules { get; set; }
-        public DbSet<EmergencyRecord> EmergencyRecords { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Seed Specialties
             modelBuilder.Entity<Speciality>().HasData(
-                new Speciality { Id = 1, Name = "General" },
-                new Speciality { Id = 2, Name = "Emergency" },
-                new Speciality { Id = 3, Name = "Pediatrics" },
-                new Speciality { Id = 4, Name = "Cardiology" },
-                new Speciality { Id = 5, Name = "Orthopedics" }
+                new Speciality { Id = 1, Name = "Pediatrics" },
+                new Speciality { Id = 2, Name = "Cardiology" },
+                new Speciality { Id = 3, Name = "Orthopedics" },
+                new Speciality { Id = 4, Name = "Neurology" },
+                new Speciality { Id = 5, Name = "Dermatology" },
+                new Speciality { Id = 6, Name = "Neurology" },
+                new Speciality { Id = 7, Name = "Endocrinology" },
+                new Speciality { Id = 8, Name = "Infectious Disease"},
+                new Speciality { Id = 9, Name = "Hematology" },
+                new Speciality { Id = 10, Name = "Anesthesiology" }
             );
 
             // Ensure the UserName is unique

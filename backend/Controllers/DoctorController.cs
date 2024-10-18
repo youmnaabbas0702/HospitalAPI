@@ -12,10 +12,10 @@ using System.Numerics;
 using HospitalSystemAPI.Services;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Microsoft.AspNetCore.Authorization;
+using HospitalSystemAPI.DTOs.DoctorDTOs;
 
 namespace HospitalSystemAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorController : ControllerBase
@@ -45,7 +45,7 @@ namespace HospitalSystemAPI.Controllers
         [HttpGet("Speciality/{id}")]
         public async Task<ActionResult<IEnumerable<GetDoctorDTO>>> GetSpecialityDoctors(int id)
         {
-            var doctors = await _context.Doctors.Include(d => d.Speciality).Where(d => d.SpecialityId == id).ToListAsync();
+            var doctors = await _context.Doctors.Where(d => d.SpecialityId == id).ToListAsync();
 
             List<GetDoctorDTO> DoctorsObject = getDoctorsDTOobject(doctors);
             return DoctorsObject;
@@ -65,12 +65,10 @@ namespace HospitalSystemAPI.Controllers
 
             GetDoctorDTO DoctorObject = new GetDoctorDTO()
             {
-                Id = doctor.Id,
                 Name = doctor.Name,
-                UserName = doctor.UserName,
                 Email = doctor.Email,
+                speciality = doctor.Speciality.Name,
                 PhoneNumber = doctor.PhoneNumber,
-                speciality = doctor.Speciality.Name
             };
             return DoctorObject;
         }
@@ -80,23 +78,26 @@ namespace HospitalSystemAPI.Controllers
         // PUT: api/Doctor/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctor(string id, DoctorInsertionDTO doctorDto)
+        public async Task<IActionResult> PutDoctor(string id, DoctorEditDTO doctorDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var existingDoctor = await _context.Doctors.FindAsync(id);
-            if (existingDoctor == null)
+            var doctor = await _context.Doctors.FindAsync(id);
+            if (doctor == null)
             {
                 return NotFound();
             }
 
-            // Call the private method to map DTO to the entity
-            MapDtoToDoctor(doctorDto, existingDoctor);
+            doctor.PhoneNumber = doctorDto.PhoneNumber;
+            doctor.UserName = doctorDto.UserName;
+            doctor.Email = doctorDto.Email;
+            doctor.Email = doctorDto.Email;
+            doctor.PasswordHash = doctorDto.Password;
 
-            _context.Entry(existingDoctor).State = EntityState.Modified;
+            _context.Entry(doctor).State = EntityState.Modified;
 
             try
             {
@@ -147,12 +148,10 @@ namespace HospitalSystemAPI.Controllers
             {
                 DoctorsObject.Add(new GetDoctorDTO()
                 {
-                    Id = doctor.Id,
                     Name = doctor.Name,
-                    UserName = doctor.UserName,
                     Email = doctor.Email,
+                    speciality = doctor.Speciality?.Name ?? " ",
                     PhoneNumber = doctor.PhoneNumber,
-                    speciality = doctor.Speciality.Name
                 });
             }
             return DoctorsObject;

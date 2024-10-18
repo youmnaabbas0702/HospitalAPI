@@ -5,7 +5,7 @@ namespace HospitalSystemAPI.Services
 {
     public class DataSeeder
     {
-        private static readonly List<string> Roles = new List<string> { "genAdmin","emergAdmin", "Doctor", "Patient" };
+        private static readonly List<string> Roles = new List<string> { "genAdmin", "Doctor", "Patient" };
 
         public static async Task SeedAdminsAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -13,7 +13,6 @@ namespace HospitalSystemAPI.Services
             await SeedRolesAsync(roleManager);
 
             var generalAdmin = new ApplicationUser { UserName = "admin_general", Email = "admin_general@gmail.com", EmailConfirmed = true };
-            var emergencyAdmin = new ApplicationUser { UserName = "admin_emergency", Email = "admin_emergency@gmail.com", EmailConfirmed = true };
             
             var existingGenAdmin = await userManager.FindByEmailAsync(generalAdmin.Email);
             if (existingGenAdmin == null)
@@ -22,12 +21,6 @@ namespace HospitalSystemAPI.Services
                 await userManager.AddToRoleAsync(generalAdmin, "genAdmin");
             }
 
-            var existingEmergAdmin = await userManager.FindByEmailAsync(emergencyAdmin.Email);
-            if (existingEmergAdmin == null)
-            {
-                await userManager.CreateAsync(emergencyAdmin, "AdEmerg#1");
-                await userManager.AddToRoleAsync(emergencyAdmin, "genAdmin");
-            }
         }
 
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)

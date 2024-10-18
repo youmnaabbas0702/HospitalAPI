@@ -35,7 +35,7 @@ namespace HospitalSystemAPI.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result);
+            return Ok(result.Message);
         }
 
         [Authorize(Roles = "genAdmin")]
@@ -53,7 +53,7 @@ namespace HospitalSystemAPI.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(new {Token = result.Token, ExpiresOn = result.ExpiresOn});
+            return Ok(result.Message);
         }
 
         [HttpPost("token")]

@@ -4,6 +4,7 @@ using HospitalSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalSystemAPI.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241018133207_relationOfEmergency")]
+    partial class relationOfEmergency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,6 +163,61 @@ namespace HospitalSystemAPI.Migrations
                     b.ToTable("DoctorsSchedules");
                 });
 
+            modelBuilder.Entity("HospitalSystemAPI.Models.EmergencyRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PatientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("RecordTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("EmergencyRecords");
+                });
+
+            modelBuilder.Entity("HospitalSystemAPI.Models.EmergencySchedule", b =>
+                {
+                    b.Property<int>("ShiftId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftId"));
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DoctorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ShiftId");
+
+                    b.ToTable("EmergencySchedules");
+                });
+
             modelBuilder.Entity("HospitalSystemAPI.Models.MedicalHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -249,52 +307,27 @@ namespace HospitalSystemAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Pediatrics"
+                            Name = "General"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Cardiology"
+                            Name = "Emergency"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Orthopedics"
+                            Name = "Pediatrics"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Neurology"
+                            Name = "Cardiology"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Dermatology"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Neurology"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Endocrinology"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Infectious Disease"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Hematology"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Anesthesiology"
+                            Name = "Orthopedics"
                         });
                 });
 
@@ -442,12 +475,17 @@ namespace HospitalSystemAPI.Migrations
                 {
                     b.HasBaseType("HospitalSystemAPI.Models.ApplicationUser");
 
+                    b.Property<int?>("EmergencyScheduleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SpecialityId")
                         .HasColumnType("int");
+
+                    b.HasIndex("EmergencyScheduleId");
 
                     b.HasIndex("SpecialityId");
 
@@ -502,6 +540,17 @@ namespace HospitalSystemAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("HospitalSystemAPI.Models.EmergencyRecord", b =>
+                {
+                    b.HasOne("HospitalSystemAPI.Models.EmergencySchedule", "Shift")
+                        .WithMany()
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shift");
                 });
 
             modelBuilder.Entity("HospitalSystemAPI.Models.MedicalHistory", b =>
@@ -585,13 +634,25 @@ namespace HospitalSystemAPI.Migrations
 
             modelBuilder.Entity("HospitalSystemAPI.Models.Doctor", b =>
                 {
+                    b.HasOne("HospitalSystemAPI.Models.EmergencySchedule", "EmergencySchedule")
+                        .WithMany("Doctors")
+                        .HasForeignKey("EmergencyScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("HospitalSystemAPI.Models.Speciality", "Speciality")
                         .WithMany("Doctors")
                         .HasForeignKey("SpecialityId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
+                    b.Navigation("EmergencySchedule");
+
                     b.Navigation("Speciality");
+                });
+
+            modelBuilder.Entity("HospitalSystemAPI.Models.EmergencySchedule", b =>
+                {
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("HospitalSystemAPI.Models.Speciality", b =>

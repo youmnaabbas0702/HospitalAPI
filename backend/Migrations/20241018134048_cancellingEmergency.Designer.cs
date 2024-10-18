@@ -4,6 +4,7 @@ using HospitalSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalSystemAPI.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241018134048_cancellingEmergency")]
+    partial class cancellingEmergency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,52 +252,27 @@ namespace HospitalSystemAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Pediatrics"
+                            Name = "General"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Cardiology"
+                            Name = "Emergency"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Orthopedics"
+                            Name = "Pediatrics"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Neurology"
+                            Name = "Cardiology"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Dermatology"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Neurology"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Endocrinology"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Infectious Disease"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Hematology"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Anesthesiology"
+                            Name = "Orthopedics"
                         });
                 });
 

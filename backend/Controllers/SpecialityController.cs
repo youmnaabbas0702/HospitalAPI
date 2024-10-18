@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalSystemAPI.Data;
 using HospitalSystemAPI.Models;
+using HospitalSystemAPI.DTOs.SpecialityDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalSystemAPI.Controllers
 {
@@ -21,67 +23,50 @@ namespace HospitalSystemAPI.Controllers
             _context = context;
         }
 
+        [Authorize(Roles ="genAdmin")]
         // GET: api/Speciality
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Speciality>>> GetSpecialities()
+        public async Task<ActionResult<IEnumerable<string>>> GetSpecialities()
         {
-            List<Speciality> specialitiesObject = new List<Speciality>();
-            var specialities = await _context.Specialities.Include(s => s.Doctors).ToListAsync();
+            List<string> specialitiesObject = new List<string>();
+            var specialities = await _context.Specialities.ToListAsync();
 
             foreach (var speciality in specialities)
             {
-                if(!(speciality.Name == "General" || speciality.Name == "Emergency"))
-                {
-                    specialitiesObject.Add(speciality);
-                }
+                specialitiesObject.Add(speciality.Name);
             }
             return specialitiesObject;
         }
 
-        //// GET: api/Speciality/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Speciality>> GetSpeciality(int id)
-        //{
-        //    var speciality = await _context.Specialities.Include(s=>s.Doctors).SingleOrDefaultAsync(s=>s.Id==id);
-
-        //    if (speciality == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return speciality;
-        //}
-
+        [Authorize(Roles ="genAdmin")]
         // POST: api/Speciality
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Speciality>> PostSpeciality(Speciality speciality)
+        public async Task<ActionResult> PostSpeciality([FromBody] SpecialityDTO specialityDto)
         {
+            // Validate the incoming data
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Check if the speciality name already exists
+            var exists = await _context.Specialities.AnyAsync(s => s.Name == specialityDto.Name);
+            if (exists)
+            {
+                return BadRequest("Speciality name already exists.");
+            }
+
+            // Create the new speciality
+            var speciality = new Speciality
+            {
+                Name = specialityDto.Name
+            };
+
             _context.Specialities.Add(speciality);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSpeciality", new { id = speciality.Id }, speciality);
+            return Ok("Speciality created successfully");
         }
 
-        // DELETE: api/Speciality/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSpeciality(int id)
-        {
-            var speciality = await _context.Specialities.FindAsync(id);
-            if (speciality == null)
-            {
-                return NotFound();
-            }
-
-            _context.Specialities.Remove(speciality);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool SpecialityExists(int id)
-        {
-            return _context.Specialities.Any(e => e.Id == id);
-        }
     }
 }
