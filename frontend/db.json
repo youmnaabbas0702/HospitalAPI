@@ -1,0 +1,167 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Juliet Oma",
+      "email": "test@gmail.com",
+      "password": "1234",
+      "role": "doctor"
+    },
+    {
+      "id": "42c0",
+      "first_name": "sonds",
+      "email": "sondos@gmail.com",
+      "password": "1234",
+      "last_name": "essam",
+      "phonenumber": "121",
+      "address": "fchdsfjsao",
+      "role": "doctor"
+    },
+    {
+      "id": "1d78",
+      "first_name": "fdlswf",
+      "email": "12@gmail.com",
+      "password": "12",
+      "last_name": "fjdof",
+      "phonenumber": "32203",
+      "address": "fdsf;kfs[",
+      "role": "administrator"
+    },
+    {
+      "id": "61f1",
+      "first_name": "test",
+      "email": "test2@gmail.com",
+      "password": "12",
+      "last_name": "test",
+      "phonenumber": "12121",
+      "address": "2121",
+      "role": "administrator"
+    },
+    {
+      "id": "14d9",
+      "first_name": "test3",
+      "email": "test3@gmail.com",
+      "password": "12",
+      "last_name": "333",
+      "phonenumber": "1929102",
+      "address": "dsahldas",
+      "role": "administrator"
+    },
+    {
+      "id": "78f6",
+      "first_name": "test4",
+      "email": "test4@gmail.com",
+      "password": "12",
+      "last_name": "sdadas",
+      "phonenumber": "21212",
+      "address": "djsodsd",
+      "role": "administrator"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "1234",
+      "name": "salma",
+      "speciality": "Emergency",
+      "phoneNumber": "01028343654"
+    },
+    {
+      "id": "cf81",
+      "name": "sondos",
+      "speciality": "eyes",
+      "phoneNumber": "21223232",
+      "email": "sondos@gmAIL.COM",
+      "password": "12"
+    },
+    {
+      "id": "03ba",
+      "name": "nesma",
+      "speciality": "heart",
+      "phoneNumber": "01098310561",
+      "email": "test5@gmail.cp,",
+      "password": "12"
+    },
+    {
+      "id": "d470",
+      "name": "nesma",
+      "speciality": "heart",
+      "phoneNumber": "01098310561",
+      "email": "test5@gmail.cp,",
+      "password": "12"
+    },
+    {
+      "id": "e346",
+      "name": "nesma",
+      "speciality": "heart",
+      "phoneNumber": "01098310561",
+      "email": "test5@gmail.cp,",
+      "password": "12"
+    }
+  ],
+  "patients": [
+    {
+      "id": 123456,
+      "name": "ahmed",
+      "birthDate": "2002-07-02T00:00:00",
+      "phoneNumber": "123456789",
+      "medicalHistories": [
+        {
+          "id": 2,
+          "patientId": 123456,
+          "condition": "msh 3arfa",
+          "recordDate": "2024-03-03T00:00:00",
+          "treatment": "antibiotics"
+        },
+        {
+          "id": 3,
+          "patientId": 123456,
+          "condition": "anything",
+          "recordDate": "2023-07-09T00:00:00",
+          "treatment": "panadol"
+        }
+      ]
+    },
+    {
+      "id": "9c83",
+      "name": "sondos",
+      "birthDate": "2024-10-22",
+      "phoneNumber": "01098310561",
+      "medicalHistories": []
+    },
+    {
+      "id": "dab1",
+      "name": "jhgk",
+      "birthDate": "2024-10-07",
+      "phoneNumber": "01098310561",
+      "medicalHistories": []
+    }
+  ],
+  "appoints": [
+    {
+      "id": "0",
+      "patientId": "123456",
+      "doctorId": "1234",
+      "patientName": "ahmed",
+      "doctortName": "salma",
+      "appointmentDate": "2024-10-18T07:11:47.748Z"
+    }
+  ],
+  "special": [
+    {
+      "id": "1",
+      "name": "Emergency"
+    },
+    {
+      "id": "2",
+      "name": "eyes"
+    },
+    {
+      "id": "3",
+      "name": "heart"
+    },
+    {
+      "id": "fbd5",
+      "name": "nose"
+    }
+  ]
+}
